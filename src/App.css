@@ -1,0 +1,19 @@
+body{
+    margin: 0;
+    background-color: silver;
+    display:flex;
+    flex-direction:column;
+    min-height:100vh;
+}
+
+/* ::-webkit-scrollbar {
+    width: 8px;
+    height: 6px;
+} */
+
+
+
+/* Handle on hover */
+/* ::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(112.83deg, rgba(255, 255, 255, 0.82) 0%, rgba(255, 255, 255, 0.8) 110.84%); 
+} */

@@ -1,0 +1,47 @@
+.adminContainer{
+    display: flex;
+    justify-content: center;
+    background-color: #003580;
+}
+
+.adminWrapper{
+    width: 100%;
+    max-width: 1180px;
+}
+
+.adminButton{
+    display: flex;
+    overflow: auto;
+}
+
+#AdminAddUser{
+    margin-left: 0px;
+}
+
+.AdminAddUser,.AdminAddHall,.AdminAddPeriod,.AdminGetAll{
+    margin:13px 6px;
+    padding: 10px;
+    color:white;
+    font-size: 14px;
+    font-weight: bold;
+    background-color: green;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    max-width: 200px;
+    min-width: fit-content
+}
+
+.AdminDeleteUser,.AdminDeleteHall,.AdminDeleteBooked{
+    margin:13px 6px;
+    padding: 10px;
+    color:white;
+    font-size: 14px;
+    font-weight: bold;
+    background-color: rgb(247, 39, 39);
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    max-width: 200px;
+    min-width: fit-content
+}

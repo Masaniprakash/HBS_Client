@@ -1,0 +1,66 @@
+.homeContainer{
+    min-height: calc(100vh - 210px);
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    gap: 30px;  
+    width: 100%;
+    font-size: 20px;
+    flex-direction: column;   
+}
+
+.homeTitle{
+    width: 100%;
+    max-width: 1180px;
+    font-size: 26px;
+    color: #003580;
+}
+
+.searchItem{
+    padding: 1.5%;
+    border-radius: 5px;
+    display: flex;
+    gap: 20px;
+    flex:1 1 300px;
+    flex-wrap: wrap; 
+    justify-content: space-between;
+    margin-bottom: 20px;
+    width: 97%;
+    max-width: 925px;
+    align-self: center;
+    background-color: whitesmoke;
+}
+
+.siImg{
+    height: 300px;
+    width: 100%;
+    object-fit: cover;
+}
+
+.siDesc{
+    display: flex;
+    gap: 9px;
+    flex: 2;
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+}
+
+.siTitle{
+    font-size: 24px;  
+    color: #0071c2;
+}
+
+.siCheckButton{
+    background-color: #003580;
+    border: none;
+    padding: 8px;
+    font-weight: 400;
+    color: white;
+    width: 30%;
+    display: flex;
+    justify-content: center;
+    margin-left: 35%;
+    cursor: pointer;
+    font-size: 16px;
+}
