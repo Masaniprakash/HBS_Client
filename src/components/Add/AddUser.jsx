@@ -29,7 +29,7 @@ const AddUser = () => {
             }else{
                 await axios({
                     method: 'post',
-                    url:"http://192.168.1.135:4000/api/auth/",
+                    url:"https://hbsserver.cyclic.app/api/auth/",
                     data:{
                         name,
                         email,

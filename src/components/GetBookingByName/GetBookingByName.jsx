@@ -8,7 +8,7 @@ import GetBooking from "../GetBooking/GetBooking";
 const GetBookingByName = () => {
     const [user,setUser]=useState()
 
-    const {data}=useFetch(`http://192.168.1.135:4000/api/hours/`)
+    const {data}=useFetch(`https://hbsserver.cyclic.app/api/hours/`)
 
     let getUser=JSON.parse(localStorage.getItem("user")) || null
     let token=getUser?.token;
@@ -21,7 +21,7 @@ const GetBookingByName = () => {
                 try {
                     let res=await axios({
                         method: 'get',
-                        url:`http://192.168.1.135:4000/api/auth/token`,
+                        url:`https://hbsserver.cyclic.app/api/auth/token`,
                         headers: {
                             accept: 'application/json',
                             token:token

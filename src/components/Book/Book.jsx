@@ -19,7 +19,7 @@ const Reserve = ({setOpen,hallId}) => {
     const [user,setUser]=useState()
     const [error,setError]=useState("")
     const [selectedHours,setSelectedHours]=useState([])
-    const {data,loading}=useFetch(`http://192.168.1.135:4000/api/hall/getHallHours/${hallId}`)
+    const {data,loading}=useFetch(`https://hbsserver.cyclic.app/api/hall/getHallHours/${hallId}`)
 
     let getUser=JSON.parse(localStorage.getItem("user")) || null
     let token=getUser?.token;
@@ -29,7 +29,7 @@ const Reserve = ({setOpen,hallId}) => {
             if(token){
                 let res=await axios({
                     method: 'get',
-                    url:`http://192.168.1.135:4000/api/auth/token`,
+                    url:`https://hbsserver.cyclic.app/api/auth/token`,
                     headers: {
                         accept: 'application/json',
                         token:token
@@ -44,7 +44,7 @@ const Reserve = ({setOpen,hallId}) => {
     
     useEffect(()=>{
         const fetch=async()=>{
-            let res=await axios.get(`http://192.168.1.135:4000/api/hall/find/${hallId}`) 
+            let res=await axios.get(`https://hbsserver.cyclic.app/api/hall/find/${hallId}`) 
             let data=res.data
             setHallName(data.name)
         }
@@ -100,7 +100,7 @@ const Reserve = ({setOpen,hallId}) => {
                 let dept=`${user?.department}`
                 await Promise.all(
                     selectedHours.map(async(hourId) => {
-                        const res = axios.put(`http://192.168.1.135:4000/api/hours/availability/${hourId}`, {
+                        const res = axios.put(`https://hbsserver.cyclic.app/api/hours/availability/${hourId}`, {
                             date:getTimeDate,name:userName,hallName:hallName,department:dept,reason:reason
                         })
                         return res.data;

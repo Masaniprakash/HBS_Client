@@ -21,7 +21,7 @@ const AddHall = () => {
             } else {
                 await axios({
                     method: 'post',
-                    url: "http://192.168.1.135:4000/api/hall/",
+                    url: "https://hbsserver.cyclic.app/api/hall/",
                     data: {
                         name: hallName,
                         url: hallNameUrl || photo

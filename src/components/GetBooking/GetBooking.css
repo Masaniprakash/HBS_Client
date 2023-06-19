@@ -113,3 +113,29 @@ th,td,tr{
     }
     
 }
+
+.pagination{
+    display: flex;
+    list-style: none;
+}
+
+.pagination li{
+    padding: 8px;
+    margin: 5px 10px;
+    border: 1px solid gray;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.paginationActive{
+    background-color: #003580;
+    color: white;
+}
+
+.paginationPrevNext{
+    padding: 8px;
+    margin: 5px 10px;
+    border: 1px solid gray;
+    border-radius: 50%;
+    cursor: pointer;
+}

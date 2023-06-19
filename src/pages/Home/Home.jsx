@@ -15,7 +15,7 @@ import hall8 from "../../images/hall8.jpg"
 import hall9 from "../../images/hall9.jpg"
 
 const Home = () => {
-    const {data,loading}=useFetch(`http://192.168.1.135:4000/api/hall/`)
+    const {data,loading}=useFetch(`https://hbsserver.cyclic.app/api/hall/`)
     const images=[hall1,hall2,hall3,hall4,hall5,hall6,hall7,hall8,hall9]
     return (
         <div> 

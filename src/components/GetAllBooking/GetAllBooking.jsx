@@ -13,7 +13,7 @@ const GetAllBooking = () => {
         let fetch=async()=>{
             let res=await axios({
                 method: 'get',
-                url:"http://192.168.1.135:4000/api/hours/getAllBooking",
+                url:"https://hbsserver.cyclic.app/api/hours/getAllBooking",
                 headers: {
                     accept: 'application/json',
                     token:token

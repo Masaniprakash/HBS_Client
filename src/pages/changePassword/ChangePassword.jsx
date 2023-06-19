@@ -22,7 +22,7 @@ const ChangePassword = () => {
             if (newPassword===renewPassword){
                 await axios({
                     method: 'put',
-                    url:"http://192.168.1.135:4000/api/auth/changePassword",
+                    url:"https://hbsserver.cyclic.app/api/auth/changePassword",
                     data: {
                         newpassword:newPassword 
                     },

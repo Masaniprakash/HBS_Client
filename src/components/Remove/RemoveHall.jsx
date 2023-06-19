@@ -11,7 +11,7 @@ const RemoveHall = () => {
     const [hallList,setHallList]=useState()
     const [loading,setLoading]=useState(false)
 
-    const {data}=useFetch("http://192.168.1.135:4000/api/hall/",hall)
+    const {data}=useFetch("https://hbsserver.cyclic.app/api/hall/",hall)
 
     let getToken=JSON.parse(localStorage.getItem("user")) || null
     let token=getToken?.token;
@@ -19,7 +19,7 @@ const RemoveHall = () => {
     
     useEffect(()=>{
         let fetch=async()=>{
-            let res=await axios.get("http://192.168.1.135:4000/api/hall/")
+            let res=await axios.get("https://hbsserver.cyclic.app/api/hall/")
             let arr=[]
             res.data?.map((item,index)=>{
                 arr.push({value:item.name,label:item.name}) 
@@ -40,7 +40,7 @@ const RemoveHall = () => {
                 let id = getHall._id 
                 await axios({
                     method: 'delete',
-                    url:`http://192.168.1.135:4000/api/hall/${id}`,
+                    url:`https://hbsserver.cyclic.app/api/hall/${id}`,
                     headers: {
                         accept: 'application/json',
                         token:token

@@ -9,7 +9,7 @@ const RemovePastBook = () => {
     const [fromDate, setFromDate] = useState("");
     const [toDate, setToDate] = useState("");
     const [loading,setLoading]=useState(false)
-    const {data}=useFetch("http://192.168.1.135:4000/api/hours/")
+    const {data}=useFetch("https://hbsserver.cyclic.app/api/hours/")
 
     let getToken=JSON.parse(localStorage.getItem("user")) || null
     let token=getToken?.token;
@@ -27,7 +27,7 @@ const RemovePastBook = () => {
                 data.map(async(item)=>{
                     await axios({
                         method: 'put',
-                        url:`http://192.168.1.135:4000/api/hours/deleteThePastBetween/${item._id}`,
+                        url:`https://hbsserver.cyclic.app/api/hours/deleteThePastBetween/${item._id}`,
                         data:{
                             fromdates:fromDate,
                             todates:toDate,

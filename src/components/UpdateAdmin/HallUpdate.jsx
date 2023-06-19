@@ -15,12 +15,12 @@ const UpdateHall = () => {
     let getToken = JSON.parse(localStorage.getItem("user")) || null
     let token = getToken?.token; 
 
-    const {data}=useFetch("http://192.168.1.135:4000/api/hall",hallName)  
+    const {data}=useFetch("https://hbsserver.cyclic.app/api/hall",hallName)  
 
     
     useEffect(()=>{
         let fetch=async()=>{
-            let res=await axios.get("http://192.168.1.135:4000/api/hall")
+            let res=await axios.get("https://hbsserver.cyclic.app/api/hall")
             let arr=[]
             res.data?.map((item,index)=>{
                 arr.push({value:item.name,label:item.name}) 
@@ -32,7 +32,7 @@ const UpdateHall = () => {
 
     useEffect(() => {
         let fetch = async () => {
-            let res = await axios.get(`http://192.168.1.135:4000/api/hall/find/${id}`)
+            let res = await axios.get(`https://hbsserver.cyclic.app/api/hall/find/${id}`)
             setHallName(res.data.name)
             setHallNameUrl(res.data.url)    
         }
@@ -57,7 +57,7 @@ const UpdateHall = () => {
             } else {
                 await axios({
                     method: 'put',
-                    url: `http://192.168.1.135:4000/api/hall/${id}`,
+                    url: `https://hbsserver.cyclic.app/api/hall/${id}`,
                     data: {
                         name: hallName,
                         url: hallNameUrl

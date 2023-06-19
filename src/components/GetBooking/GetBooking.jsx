@@ -15,22 +15,28 @@ const GetBooking = ({user , data , action}) => {
     const [fromDate, setFromDate] = useState("");
     const [toDate, setToDate] = useState("");
     const [dept, setDept] = useState("");
-
-    
-    // let department=[
-    //     "B.Sc Data Science","BCA","B.Sc Computer Science","B.Sc Information Technology","B.Com",
-    //     "B.Com(CA)","B.Com(IT)","B.Com (Accounting & Finance)","B.Com (Business Analytics)",
-    //     "B.Com (Professional Accounting)","B.Sc Maths","B.Sc. Psychology","B.Sc Biochemistry",
-    //     "B.Sc Biotechnology","B.Sc Microbiology","B.Sc Nutrition and Dietetics","B.Sc Internet of Things",
-    //     "B.Sc Electronics & Communication System","BBA","BBA(CA)","BBA(Logistics)","B.A. English Literature"
-    //     ,"MCA" ,"M.Sc Computer Science","MBA","M.Com","M.Com (Computer Applications)",
-    //     "M.Com (International Business)","M.Sc Biochemistry","M.Sc Biotechnology","M.Sc Microbiology",
-    //     "M.Sc Foods & Nutrition","M.Sc Maths","M.Sc Applied Electronics","M.A. English Literature",
-    // ]
-
+    let [currentPage, setCurrentPage] = useState(1);
+    let recordsPerPage = 5;
+    let indexOfLastRecord = currentPage * recordsPerPage;   
+    let indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
+    // let currentRecords = data?.slice(indexOfFirstRecord, indexOfLastRecord);
+    let totalPages = Math.ceil(data.length / recordsPerPage);
+    let pageNumbers = [...Array(totalPages).keys()].map(num => num + 1);
+    // console.log(pageNumbers);
+    const prevPage = () => {
+        if (currentPage !== 1) {
+            setCurrentPage(currentPage - 1);
+        }
+    };
+    console.log(totalPages);
+    const nextPage = () => {
+        if (currentPage !== totalPages) {
+            setCurrentPage(currentPage + 1);
+        }
+    };
     useEffect(()=>{
         let fetch=async()=>{
-            let res=await axios.get("http://192.168.1.135:4000/api/hall/")
+            let res=await axios.get("https://hbsserver.cyclic.app/api/hall/")
             let arr=[]
             res.data?.map((item,index)=>{
                 arr.push({value:item.name,label:item.name}) 
@@ -39,6 +45,69 @@ const GetBooking = ({user , data , action}) => {
         }
         fetch()
     },[])
+
+    let mass=data.filter((hour)=>{
+        if(!hallName && !dates && !fromDate && !toDate && !dept){
+            return hour
+        }
+        if(dept && !hallName && !dates && !fromDate && !toDate){
+            return hour?.department?.toLowerCase()?.includes(dept?.value?.toLowerCase())
+        }
+        if(dates){
+            if(dates && !dept && !hallName){
+                return hour?.date?.split("T")[0]===dates
+            }else if(dates && dept && hallName){
+                return (hour?.date?.split("T")[0]===dates
+                    && hour.hallName?.toLowerCase().includes(hallName?.value.toLowerCase()) 
+                    && hour.department.toLowerCase().includes(dept?.value?.toLowerCase())
+                )
+            }else if(dates && dept && !hallName){
+                return (hour?.date?.split("T")[0]===dates 
+                    && hour.department.toLowerCase().includes(dept?.value?.toLowerCase())
+                )
+            }
+        }
+        if(hallName){
+            if(hallName && dates && !fromDate && !dept && !toDate){
+                return (hour.hallName?.toLowerCase().includes(hallName?.value.toLowerCase()) 
+                && hour?.date?.split("T")[0]===dates
+                )
+            }else if(hallName && dept && !dates && !fromDate && !toDate){
+                return (hour.hallName?.toLowerCase().includes(hallName?.value.toLowerCase()) 
+                    && hour.department.toLowerCase().includes(dept?.value?.toLowerCase())
+                )
+            }else if(hallName && !dates && !fromDate && !toDate && !dept){
+                return hour.hallName?.toLowerCase().includes(hallName?.value.toLowerCase())
+            }
+        }
+        if(fromDate && toDate){
+            let dateSplit=hour.date.split("T")[0]
+            if(!hallName && !dates && !dept){
+                if(dateSplit>=fromDate && dateSplit<=toDate){
+                    return hour
+                }else {
+                    return hour=null;
+                }
+            }else if(hallName && !dates && !dept){
+                return (hour.hallName?.toLowerCase().includes(hallName?.value.toLowerCase()) 
+                    && dateSplit>=fromDate && dateSplit<=toDate
+                )
+            }else if(!hallName && dept && !dates){
+                return ( dateSplit>=fromDate && dateSplit<=toDate
+                    && hour.department.toLowerCase().includes(dept?.value?.toLowerCase())
+                )
+            }
+            
+        }
+        if(hallName && dept && fromDate && toDate && !dates ){
+            let dateSplit=hour.date.split("T")[0]
+            return (hour.hallName?.toLowerCase().includes(hallName?.value.toLowerCase()) 
+                && dateSplit>=fromDate && dateSplit<=toDate
+                && hour.department.toLowerCase().includes(dept?.value?.toLowerCase())
+            )
+        }
+        return null
+        })
     
     data?.sort((a,b)=>{
         return new Date(a.date) - new Date(b.date);
@@ -60,13 +129,6 @@ const GetBooking = ({user , data , action}) => {
                     <div className="filHallDate">
                         <div className="filBox">
                             <span className="removeSpan">Select Hall Name:</span>
-                            {/* {hallList&&<select className="hallName" value={hallName} 
-                                    onChange={(e)=>setHallName(e.target.value)}
-                                >
-                                    <option ></option>
-                                    {hallList.map((item,index)=><option  key={index}>{item.name}</option>)}
-                                </select>
-                            } */}
                             <CustomSelect
                                 option={hallList}
                                 selectedOptions={hallName}
@@ -139,77 +201,19 @@ const GetBooking = ({user , data , action}) => {
                         <thead className="tableHeader">
                             <tr>
                                 <th>S.No</th>
-                                <th>Hall Name</th>
+                                <th style={{minWidth:80,maxWidth:130}}>Hall Name</th>
                                 <th>Hour</th>
                                 {user==="admin" && <th> Staff Name</th>}
                                 {user==="admin" &&<th> Department</th>}
-                                <th>Reason</th>
-                                <th>Date</th>
+                                <th style={{maxWidth:200,minWidth:160}}>Reason</th>
+                                <th style={{maxWidth:75,minWidth:75}}>Date</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {data.filter((hour)=>{
-                                if(!hallName && !dates && !fromDate && !toDate && !dept){
-                                    return hour
-                                }
-                                if(dept && !hallName && !dates && !fromDate && !toDate){
-                                    return hour?.department?.toLowerCase()?.includes(dept?.value?.toLowerCase())
-                                }
-                                if(dates){
-                                    if(dates && !dept && !hallName){
-                                        return hour?.date?.split("T")[0]===dates
-                                    }else if(dates && dept && hallName){
-                                        return (hour?.date?.split("T")[0]===dates
-                                            && hour.hallName?.toLowerCase().includes(hallName?.value.toLowerCase()) 
-                                            && hour.department.toLowerCase().includes(dept?.value?.toLowerCase())
-                                        )
-                                    }else if(dates && dept && !hallName){
-                                        return (hour?.date?.split("T")[0]===dates 
-                                            && hour.department.toLowerCase().includes(dept?.value?.toLowerCase())
-                                        )
-                                    }
-                                }
-                                if(hallName){
-                                    if(hallName && dates && !fromDate && !dept && !toDate){
-                                        return (hour.hallName?.toLowerCase().includes(hallName?.value.toLowerCase()) 
-                                        && hour?.date?.split("T")[0]===dates
-                                        )
-                                    }else if(hallName && dept && !dates && !fromDate && !toDate){
-                                        return (hour.hallName?.toLowerCase().includes(hallName?.value.toLowerCase()) 
-                                            && hour.department.toLowerCase().includes(dept?.value?.toLowerCase())
-                                        )
-                                    }else if(hallName && !dates && !fromDate && !toDate && !dept){
-                                        return hour.hallName?.toLowerCase().includes(hallName?.value.toLowerCase())
-                                    }
-                                }
-                                if(fromDate && toDate){
-                                    let dateSplit=hour.date.split("T")[0]
-                                    if(!hallName && !dates && !dept){
-                                        if(dateSplit>=fromDate && dateSplit<=toDate){
-                                            return hour
-                                        }else {
-                                            return hour=null;
-                                        }
-                                    }else if(hallName && !dates && !dept){
-                                        return (hour.hallName?.toLowerCase().includes(hallName?.value.toLowerCase()) 
-                                            && dateSplit>=fromDate && dateSplit<=toDate
-                                        )
-                                    }else if(!hallName && dept && !dates){
-                                        return ( dateSplit>=fromDate && dateSplit<=toDate
-                                            && hour.department.toLowerCase().includes(dept?.value?.toLowerCase())
-                                        )
-                                    }
-                                    
-                                }
-                                if(hallName && dept && fromDate && toDate && !dates ){
-                                    let dateSplit=hour.date.split("T")[0]
-                                    return (hour.hallName?.toLowerCase().includes(hallName?.value.toLowerCase()) 
-                                        && dateSplit>=fromDate && dateSplit<=toDate
-                                        && hour.department.toLowerCase().includes(dept?.value?.toLowerCase())
-                                    )
-                                }
-                                return null
-                                }).map((hour,index)=>{
+                            {mass?.slice(indexOfFirstRecord, indexOfLastRecord).map((hour,index)=>{
+                                totalPages = Math.ceil(mass.length / recordsPerPage)
+                                pageNumbers = [...Array(totalPages).keys()].map(num => num + 1);
+                                // console.log(totalPages,mass.length);
                                     sNo=sNo+1
                                     let dateSplit=hour.date.split("T")[0]
                                     return (
@@ -227,6 +231,21 @@ const GetBooking = ({user , data , action}) => {
                             }
                         </tbody>
                     </table>
+                    <nav>
+                        <ul className="pagination">
+                            <button className="paginationPrevNext" onClick={prevPage}>{"<"}</button>
+                            {pageNumbers.map(number => {
+                                return (
+                                    <li key={number} className={`page-item ${currentPage==number?"paginationActive":null}`}>
+                                        <a onClick={() => setCurrentPage(number)}  className="page-link">
+                                            {number}
+                                        </a>
+                                    </li>
+                                );
+                            })}
+                            <button className="paginationPrevNext" onClick={nextPage}>{">"}</button>
+                        </ul>
+                    </nav>
                 </div>
             </div>
         </center>

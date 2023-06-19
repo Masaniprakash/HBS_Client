@@ -30,7 +30,7 @@ const Login = () => {
                 })
             }else if(email && password){
                 dispatch({type:"LOGIN_START"})
-                const res=await axios.post("http://192.168.1.135:4000/api/auth/login",{
+                const res=await axios.post("https://hbsserver.cyclic.app/api/auth/login",{
                     email,
                     password
                 })

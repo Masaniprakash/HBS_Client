@@ -10,11 +10,11 @@ const RemoveUser = () => {
     const [emailList, setEmailList] = useState()
     const [loading, setLoading] = useState(false)
 
-    // const { data } = useFetch("http://192.168.1.135:4000/api/auth/")
+    // const { data } = useFetch("https://hbsserver.cyclic.app/api/auth/")
     
     useEffect(()=>{
         let fetch=async()=>{
-            let res=await axios.get("http://192.168.1.135:4000/api/auth/")
+            let res=await axios.get("https://hbsserver.cyclic.app/api/auth/")
             let arr=[]
             res.data?.map((item)=>{
                 arr.push({value:item.email,label:item.email}) 
@@ -36,7 +36,7 @@ const RemoveUser = () => {
             } else {
                 await axios({
                     method: 'delete',
-                    url: "http://192.168.1.135:4000/api/auth/deleteUser",
+                    url: "https://hbsserver.cyclic.app/api/auth/deleteUser",
                     data: {
                         email: email?.value
                     },

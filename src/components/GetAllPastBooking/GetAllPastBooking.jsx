@@ -13,7 +13,7 @@ const GetAllPastBooking = () => {
         let fetch=async()=>{
             let res=await axios({
                 method: 'get',
-                url:"http://192.168.1.135:4000/api/hours/getAllBooking",
+                url:"https://hbsserver.cyclic.app/api/hours/getAllBooking",
                 headers: {
                     accept: 'application/json',
                     token:token
@@ -26,7 +26,6 @@ const GetAllPastBooking = () => {
     
     let currentDate=[]
     let pastDate=[]
-    console.log(pastDate);
     let today = new Date();
     let dd = today.getDate();
     let mm = today.getMonth()+1; 
@@ -46,23 +45,27 @@ const GetAllPastBooking = () => {
         ))
     )})
     let mass=[]
-    // console.log(pastDate);
     pastDate.map((item,index)=>{
         let f=false
-        mass.map((item2)=>{
+        mass.map((item2,index)=>{
             if(item.date?.split("T")[0] ===item2.date?.split("T")[0] && item.hallName === item2.hallName && item.name === item2.name){
                 f=true
-                item2.hourNo = item2.hourNo +","+ item.hourNo
+                // if(item2.hourNo?.toString()?.includes(",")){
+                //     if(item2.hourNo?.toString()?.split(",").includes(item2.hourNo)){
+                        item2.hourNo = item2.hourNo +","+ item.hourNo
+                //     } 
+                // }
             }
         })
-        // item.hourNo = pastDate[index==0?0:index].hourNo +","+ item.hourNo
         if(!f) mass.push(item)
     })
-    mass.map((item,index)=>{
-        console.log(item.hourNo);
-        // item.hourNo = item.hourNo?.split(",")?.sort()?.join(",")
+    mass.map((item)=>{
+        item.hourNo = item.hourNo?.toString()?.split(",")
+        if (item.hourNo?.length > 1) item.hourNo = item.hourNo?.sort((a,b)=>a-b)
+        item.hourNo = new Set(item.hourNo);
+        // item.hourNo = item.hourNo?.sort()
+        item.hourNo = [...item.hourNo].join(",");
     })
-    // console.log(mass);
     pastDate=mass
     return (
         <GetBooking data={pastDate} user="admin" action="Get All Past Booking"/>

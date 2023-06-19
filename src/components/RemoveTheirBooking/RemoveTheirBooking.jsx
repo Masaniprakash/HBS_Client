@@ -14,7 +14,7 @@ const RemoveTheirBooking = ({setOpen,hallId,date}) => {
     const [error,setError]=useState("")
     const [loadingRemove,setLoadingRemove]=useState(false)
     const [selectedHours,setSelectedHours]=useState([])
-    const {data,loading}=useFetch(`http://192.168.1.135:4000/api/hall/getHallHours/${hallId}`)
+    const {data,loading}=useFetch(`https://hbsserver.cyclic.app/api/hall/getHallHours/${hallId}`)
 
     let getUser=JSON.parse(localStorage.getItem("user")) || null
     let token=getUser?.token;
@@ -24,7 +24,7 @@ const RemoveTheirBooking = ({setOpen,hallId,date}) => {
             if(token){
                 let res=await axios({
                     method: 'get',
-                    url:`http://192.168.1.135:4000/api/auth/token`,
+                    url:`https://hbsserver.cyclic.app/api/auth/token`,
                     headers: {
                         accept: 'application/json',
                         token:token
@@ -76,7 +76,7 @@ const RemoveTheirBooking = ({setOpen,hallId,date}) => {
                     selectedHours.map(async(hourId) => {
                         try {
                             await axios
-                            .put(`http://192.168.1.135:4000/api/hours/deletetheiravailability/${hourId}`,
+                            .put(`https://hbsserver.cyclic.app/api/hours/deletetheiravailability/${hourId}`,
                             {dates:dates} 
                             )
                         } catch (error) {

@@ -16,7 +16,7 @@ const Reserve = ({ setOpen, hallId }) => {
     const [user, setUser] = useState()
     const [error, setError] = useState("")
     const [selectedHours, setSelectedHours] = useState([])
-    const { data, loading } = useFetch(`http://192.168.1.135:4000/api/hall/getHallHours/${hallId}`)
+    const { data, loading } = useFetch(`https://hbsserver.cyclic.app/api/hall/getHallHours/${hallId}`)
 
     let getUser = JSON.parse(localStorage.getItem("user")) || null
     let token = getUser?.token;
@@ -27,7 +27,7 @@ const Reserve = ({ setOpen, hallId }) => {
             if (token) {
                 let res = await axios({
                     method: 'get',
-                    url: `http://192.168.1.135:4000/api/auth/token`,
+                    url: `https://hbsserver.cyclic.app/api/auth/token`,
                     headers: {
                         accept: 'application/json',
                         token: token
@@ -41,7 +41,7 @@ const Reserve = ({ setOpen, hallId }) => {
 
     useEffect(() => {
         const fetch = async () => {
-            let res = await axios.get(`http://192.168.1.135:4000/api/hall/find/${hallId}`)
+            let res = await axios.get(`https://hbsserver.cyclic.app/api/hall/find/${hallId}`)
             let data = res.data
             setHallName(data.name)
         }
@@ -88,7 +88,7 @@ const Reserve = ({ setOpen, hallId }) => {
                         try {
                             await axios({
                                 method: 'put',
-                                url: `http://192.168.1.135:4000/api/hours/deleteavailability/${hourId}`,
+                                url: `https://hbsserver.cyclic.app/api/hours/deleteavailability/${hourId}`,
                                 data: {
                                     dates: dates
                                 },
@@ -97,7 +97,7 @@ const Reserve = ({ setOpen, hallId }) => {
                                     token: token
                                 }
                             })
-                            await axios.put(`http://192.168.1.135:4000/api/hours/availability/${hourId}`, {
+                            await axios.put(`https://hbsserver.cyclic.app/api/hours/availability/${hourId}`, {
                                 date: getTimeDate, name: user?.name, hallName: hallName, department: dept, reason: "cancel by admin"
                             })
 

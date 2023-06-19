@@ -25,7 +25,7 @@ const Hall = () => {
     let iNo=split.length-1// console.log(iNo);//ino=3 -1 = 2 so inois 2 we take the last one 
     const id=split[iNo]
 
-    const {data}=useFetch(`http://192.168.1.135:4000/api/hall/find/${id}`)
+    const {data}=useFetch(`https://hbsserver.cyclic.app/api/hall/find/${id}`)
     // console.log(data?.hours[0]);
     // useEffect(()=>{
     //     let set=()=>{
@@ -38,7 +38,7 @@ const Hall = () => {
     //         today = yyyy+'-'+mm+'-'+dd;
     //         setHallHourId(data.hours)
     //         hallHourId?.map(async(item)=>{
-    //             await axios.put(`http://192.168.1.135:4000/api/hours/deleteThePast/${item}`,{
+    //             await axios.put(`https://hbsserver.cyclic.app/api/hours/deleteThePast/${item}`,{
     //                 dates: today,
     //             });
     //         })
@@ -84,7 +84,7 @@ const Hall = () => {
                         <input type="date" 
                             className='date' 
                             style={{textTransform:"uppercase"}}
-                            min={disablePastDate()}
+                            // min={disablePastDate()}
                             onChange={(e)=>setDate(e.target.value)}
                             placeholder="MM/DD/YYYY"
                         />

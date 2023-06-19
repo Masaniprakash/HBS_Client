@@ -16,7 +16,7 @@ const CancelTheirBooking = () => {
 
     useEffect(()=>{
         let fetch=async()=>{
-            let res=await axios.post("http://192.168.1.135:4000/api/hall/find",{name:hallName?.value})
+            let res=await axios.post("https://hbsserver.cyclic.app/api/hall/find",{name:hallName?.value})
             // console.log(res.data?._id)
             setHallId(res.data?._id)
         }
@@ -25,7 +25,7 @@ const CancelTheirBooking = () => {
     
     useEffect(()=>{
         let fetch=async()=>{
-            let res=await axios.get("http://192.168.1.135:4000/api/hall/")
+            let res=await axios.get("https://hbsserver.cyclic.app/api/hall/")
             let arr=[]
             res.data?.map((item,index)=>{
                 arr.push({value:item.name,label:item.name}) 

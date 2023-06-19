@@ -16,18 +16,18 @@ const RemoveBookDate = () => {
 
     useEffect(()=>{
         let fetch=async()=>{
-            let res=await axios.post("http://192.168.1.135:4000/api/hall/find",{name:hallName?.value})
+            let res=await axios.post("https://hbsserver.cyclic.app/api/hall/find",{name:hallName?.value})
             setHallId(res.data?._id)
         }
         fetch()
     },[hallName])
 
-    // const {data}=useFetch("http://192.168.1.135:4000/api/hall/")
+    // const {data}=useFetch("https://hbsserver.cyclic.app/api/hall/")
 
     
     useEffect(()=>{
         let fetch=async()=>{
-            let res=await axios.get("http://192.168.1.135:4000/api/hall/")
+            let res=await axios.get("https://hbsserver.cyclic.app/api/hall/")
             let arr=[]
             res.data?.map((item,index)=>{
                 arr.push({value:item.name,label:item.name}) 
