@@ -71,7 +71,6 @@ const Reserve = ({ setOpen, hallId }) => {
         const isFou = hoursNumber.unavailableDates.find((item) => dateArray.includes(new Date(item.date)?.getTime()))
         if (isFou) {
             return `${isFou.name}(${isFou.department})`;
-
         }
     };
 

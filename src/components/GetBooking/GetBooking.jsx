@@ -6,8 +6,11 @@ import { DownloadTableExcel } from 'react-export-table-to-excel';
 import { Link } from "react-router-dom";
 import CustomSelect from "../CustomSelect/CustomSelect";
 import department  from "../../data/department";
+import { usePaginationRange } from "../Pagination/Pagination";
 
-const GetBooking = ({user , data , action}) => {
+const GetBooking = ({user , data , action }) => {
+    let dataLength = data.length;
+    console.log(dataLength);
     const tableRef = useRef(null);
     const [hallName,setHallName]=useState("")
     const [dates,setDates]=useState("")
@@ -16,19 +19,34 @@ const GetBooking = ({user , data , action}) => {
     const [toDate, setToDate] = useState("");
     const [dept, setDept] = useState("");
     let [currentPage, setCurrentPage] = useState(1);
-    let recordsPerPage = 5;
-    let indexOfLastRecord = currentPage * recordsPerPage;   
-    let indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
-    // let currentRecords = data?.slice(indexOfFirstRecord, indexOfLastRecord);
-    let totalPages = Math.ceil(data.length / recordsPerPage);
-    let pageNumbers = [...Array(totalPages).keys()].map(num => num + 1);
-    // console.log(pageNumbers);
+    let [recordsPerPage,setRecordsPerPage] = useState({value:10,label:10});
+    let [recordsPerPageList,setRecordsPerPageList] = useState([
+        {value:5,label:5},
+        {value:10,label:10},
+        {value:15,label:15},
+        {value:20,label:20}
+    ]);
+    let indexOfLastRecord = currentPage * recordsPerPage.value;   
+    let indexOfFirstRecord = indexOfLastRecord - recordsPerPage.value;
+    let totalPages = Math.ceil(data.length / recordsPerPage.value);
+    data?.map((item,index)=>{
+        item.siNo=index+1
+    })
+    
+    data?.sort((a,b)=>{
+        return new Date(a.date) + new Date(b.date);
+    });
+
+    const paginationRange = usePaginationRange({
+        totalPages,
+        recordsPerPage,
+        currentPage,
+    });
     const prevPage = () => {
         if (currentPage !== 1) {
             setCurrentPage(currentPage - 1);
         }
     };
-    console.log(totalPages);
     const nextPage = () => {
         if (currentPage !== totalPages) {
             setCurrentPage(currentPage + 1);
@@ -38,7 +56,7 @@ const GetBooking = ({user , data , action}) => {
         let fetch=async()=>{
             let res=await axios.get("https://hbsserver.cyclic.app/api/hall/")
             let arr=[]
-            res.data?.map((item,index)=>{
+            res.data?.map((item)=>{
                 arr.push({value:item.name,label:item.name}) 
             })
             setHallList(arr)
@@ -46,7 +64,7 @@ const GetBooking = ({user , data , action}) => {
         fetch()
     },[])
 
-    let mass=data.filter((hour)=>{
+    let dataAfterFilter=data.filter((hour)=>{
         if(!hallName && !dates && !fromDate && !toDate && !dept){
             return hour
         }
@@ -107,11 +125,7 @@ const GetBooking = ({user , data , action}) => {
             )
         }
         return null
-        })
-    
-    data?.sort((a,b)=>{
-        return new Date(a.date) - new Date(b.date);
-    });
+    })
 
     const clearFilter=()=>{
         setHallName("")
@@ -121,12 +135,11 @@ const GetBooking = ({user , data , action}) => {
         setDept("")
     }
 
-    let sNo=0
     return (
         <center>
-            <div className="getAllContainer" style={{minHeight:"calc(100Vh - 180px)"}}>
-                <div className="filter">
-                    <div className="filHallDate">
+            <div className="getAllContainer" style={user=="admin"?{minHeight:"calc(100Vh - 250px)"}:{minHeight:"calc(100Vh - 180px)"}}>
+                <div className="filter" id={user=="normal"&&"filter"} >
+                    <div className="filHallDate" id={user=="normal"&&"filHallDate"}>
                         <div className="filBox">
                             <span className="removeSpan">Select Hall Name:</span>
                             <CustomSelect
@@ -136,7 +149,7 @@ const GetBooking = ({user , data , action}) => {
                                 isSearchable={true}
                                 isMulti={false}
                                 style={{ marginButtom: "0.5rem" }}
-                            />
+                                />
                         </div>
                         <div className="filBox">
                             <span className="removeSpan">Select Date:</span>
@@ -144,8 +157,9 @@ const GetBooking = ({user , data , action}) => {
                                 className="dates" value={dates}
                                 disabled={fromDate!=="" || toDate!==""}
                                 onChange={(e)=>setDates(e.target.value)}
-                            />
+                                />
                         </div>
+                        {user=="normal"&&<button  className="clFilBtn" style={{maxHeight:45}} onClick={clearFilter}>Clear fliter</button>}
                     </div><br/>
                     {user==="admin" && 
                         <>
@@ -158,7 +172,6 @@ const GetBooking = ({user , data , action}) => {
                                         onChange={(e)=>setFromDate(e.target.value)}
                                     />
                                 </div>
-                                    
                                 <div className="filBox">
                                     <span className="removeSpan">To Date:</span>
                                     <input type="date" placeholder="Enter the hall Name" 
@@ -182,20 +195,33 @@ const GetBooking = ({user , data , action}) => {
                             </div>
                         </>
                     }
-                    <button  className="clFilBtn" style={{maxHeight:45}} onClick={clearFilter}>Clear fliter</button>
+                    {user=="admin"&&<button  className="clFilBtn" style={{maxHeight:45}} onClick={clearFilter}>Clear fliter</button>}
                 </div>
-                {data.length===0 ? null : <div className="ExportExcel" style={{justifyContent:"center"}}>
-                    {action==="get booking" && <Link to={"/canceltheirbooking"}>
-                        <button className="cancelBtn" >Cancel Booking</button>
-                    </Link>}
-                    <DownloadTableExcel 
-                        filename={action}
-                        sheet="users"
-                        currentTableRef={tableRef.current}
-                    >
-                        <button  className="clFilBtn" style={{marginTop:10}}> Export excel </button>
-                    </DownloadTableExcel>
-                </div>}
+                {data.length !== 0 &&
+                    <div className="ExportExcelAndRowsPerPage">
+                        {action==="get booking" && <Link to={"/canceltheirbooking"}>
+                            <button className="cancelBtn" >Cancel Booking</button>
+                        </Link>}
+                        <DownloadTableExcel 
+                            filename={action}
+                            sheet="users"
+                            currentTableRef={tableRef.current}
+                        >
+                            <button  className="clFilBtn" style={{marginTop:10}}> Export excel </button>
+                        </DownloadTableExcel>
+                        <div style={{display:"flex",alignItems:"center"}}>
+                            <span className="removeSpan">Rows Per Page:</span>
+                            <CustomSelect
+                                option={recordsPerPageList}
+                                selectedOptions={recordsPerPage}
+                                setSelectedOptions={setRecordsPerPage}
+                                isSearchable={true}
+                                isMulti={false}
+                                style={{ marginButtom: "0.5rem" }}
+                            />
+                        </div>
+                    </div>
+                }
                 <div className="getAllBook" >
                     <table ref={tableRef}>
                         <thead className="tableHeader">
@@ -210,15 +236,12 @@ const GetBooking = ({user , data , action}) => {
                             </tr>
                         </thead>
                         <tbody>
-                            {mass?.slice(indexOfFirstRecord, indexOfLastRecord).map((hour,index)=>{
-                                totalPages = Math.ceil(mass.length / recordsPerPage)
-                                pageNumbers = [...Array(totalPages).keys()].map(num => num + 1);
-                                // console.log(totalPages,mass.length);
-                                    sNo=sNo+1
+                            {dataAfterFilter?.slice(indexOfFirstRecord, indexOfLastRecord).map((hour,index)=>{
+                                totalPages = Math.ceil(dataAfterFilter.length / recordsPerPage.value)
                                     let dateSplit=hour.date.split("T")[0]
                                     return (
                                         <tr key={index}>
-                                            <td>{sNo}</td>
+                                            <td>{hour.siNo}</td>
                                             <td style={{minWidth:80,maxWidth:130}}>{hour.hallName}</td>
                                             <td>{hour.hourNo}</td>
                                             {user==="admin" && <td style={{maxWidth:170}}>{hour.name}</td>}
@@ -231,21 +254,26 @@ const GetBooking = ({user , data , action}) => {
                             }
                         </tbody>
                     </table>
-                    <nav>
-                        <ul className="pagination">
-                            <button className="paginationPrevNext" onClick={prevPage}>{"<"}</button>
-                            {pageNumbers.map(number => {
-                                return (
-                                    <li key={number} className={`page-item ${currentPage==number?"paginationActive":null}`}>
-                                        <a onClick={() => setCurrentPage(number)}  className="page-link">
-                                            {number}
-                                        </a>
-                                    </li>
-                                );
-                            })}
-                            <button className="paginationPrevNext" onClick={nextPage}>{">"}</button>
-                        </ul>
-                    </nav>
+                    { dataAfterFilter?.length !== 0 && 
+                        <nav className="paginationContainer" >
+                            <ul className="pagination">
+                                <button className="paginationPrev" disabled={currentPage == 1} onClick={prevPage}>{"<"}</button>
+                                {paginationRange?.map(number => {
+                                    return (
+                                        <li onClick={() => setCurrentPage(number)} key={number} className={`page-item ${currentPage==number?"paginationActive":null}`}>
+                                            <a className="page-link">
+                                                {number}
+                                            </a>
+                                        </li>
+                                    );
+                                })}
+                                <button className="paginationNext" disabled={currentPage == totalPages} onClick={nextPage}>{">"}</button>
+                            </ul>
+                        </nav>
+                    }
+                    {
+                        dataAfterFilter?.length == 0 && <div className="noDataFound">No Data Found</div>
+                    }
                 </div>
             </div>
         </center>

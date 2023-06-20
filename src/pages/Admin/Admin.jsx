@@ -27,47 +27,47 @@ const Admin = () => {
                 <div className="adminContainer" style={{position:"sticky",top:"80px",zIndex: 3}}>
                     <div className="adminWrapper">
                         <div className="adminButton">
-                            <button className='AdminAddUser' id='AdminAddUser' value="addUser"
+                            <button style={action==="addUser"?{borderBottom:"black solid"}:null} className='AdminAddUser' id='AdminAddUser' value="addUser"
                                 onClick={(e)=>setAction(e.target.value)}
                             >
                                 Add Dept
                             </button>
-                            <button className='AdminAddPeriod' value="addHall"
+                            <button style={action==="addHall"?{borderBottom:"black solid"}:null} className='AdminAddPeriod' value="addHall"
                                 onClick={(e)=>setAction(e.target.value)}
                             >
                                 Add Hall
                             </button>
-                            <button className='AdminGetAll' value="getAllBookedDate" 
+                            <button style={action==="getAllBookedDate"?{borderBottom:"black solid"}:null} className='AdminGetAll' value="getAllBookedDate" 
                                 onClick={(e)=>setAction(e.target.value)}
                             >
                                 Get All Current Booking
                             </button>
-                            <button className='AdminGetAll' value="getAllPastBookedDate" 
+                            <button style={action==="getAllPastBookedDate"?{borderBottom:"black solid"}:null} className='AdminGetAll' value="getAllPastBookedDate" 
                                 onClick={(e)=>setAction(e.target.value)}
                             >
                                 Get All Past Booking
                             </button>
-                            <button style={{backgroundColor:"orange"}} className='AdminAddPeriod' value="upHall"
+                            <button style={action === "upHall" ? {backgroundColor:"orange",borderBottom:"black solid"} : {backgroundColor:"orange"} } className='AdminAddPeriod' value="upHall"
                                 onClick={(e)=>setAction(e.target.value)}
                             >
                                 Update Hall
                             </button>
-                            <button className='AdminDeleteUser' value="deleteUser" 
+                            <button style={action==="deleteUser"?{borderBottom:"black solid"}:null} className='AdminDeleteUser' value="deleteUser" 
                                 onClick={(e)=>setAction(e.target.value)}
                             >
                                 Delete Dept
                             </button>
-                            <button className='AdminDeleteHall' value="deleteHall" 
+                            <button style={action==="deleteHall"?{borderBottom:"black solid"}:null} className='AdminDeleteHall' value="deleteHall" 
                                 onClick={(e)=>setAction(e.target.value)}
                             >
                                 Delete Hall
                             </button>
-                            <button className='AdminDeleteBooked' value="deleteBookedDate" 
+                            <button style={action==="deleteBookedDate"?{borderBottom:"black solid"}:null} className='AdminDeleteBooked' value="deleteBookedDate" 
                                 onClick={(e)=>setAction(e.target.value)}
                             >
                                 Cancel Booking
                             </button>
-                            <button className='AdminDeleteBooked' value="removePastBooked" 
+                            <button style={action==="removePastBooked"?{borderBottom:"black solid"}:null} className='AdminDeleteBooked' value="removePastBooked" 
                                 onClick={(e)=>setAction(e.target.value)}
                             >
                                 Remove Past Booking
@@ -76,7 +76,7 @@ const Admin = () => {
                     </div>
                     
                 </div>
-                <div className="adminAccess" style={{minHeight:"calc(100vh - 250px)"}}>
+                <div className="adminAccess" style={{minHeight:"calc(100vh - 250px)",marginTop:"10px"}}>
                     {action==="addUser" ? <AddUser/>:null}
                     {action==="deleteUser" ? <RemoveUser/>:null}
                     {action==="deleteHall" ? <RemoveHall/>:null}

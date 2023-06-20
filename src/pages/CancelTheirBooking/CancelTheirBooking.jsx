@@ -27,7 +27,7 @@ const CancelTheirBooking = () => {
         let fetch=async()=>{
             let res=await axios.get("https://hbsserver.cyclic.app/api/hall/")
             let arr=[]
-            res.data?.map((item,index)=>{
+            res.data?.map((item)=>{
                 arr.push({value:item.name,label:item.name}) 
             })
             setHallList(arr)

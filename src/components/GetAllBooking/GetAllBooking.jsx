@@ -41,6 +41,25 @@ const GetAllBooking = () => {
             }          
         ))
     )})
+
+    let mass=[]
+    currentDate.map((item)=>{
+        let f=false
+        mass.map((item2)=>{
+            if(item.date?.split("T")[0] ===item2.date?.split("T")[0] && item.hallName === item2.hallName && item.name === item2.name){
+                f=true
+                item2.hourNo = item2.hourNo +","+ item.hourNo
+            }
+        })
+        if(!f) mass.push(item)
+    })
+    mass.map((item)=>{
+        item.hourNo = item.hourNo?.toString()?.split(",")
+        if (item.hourNo?.length > 1) item.hourNo = item.hourNo?.sort((a,b)=>a-b)
+        item.hourNo = new Set(item.hourNo);
+        item.hourNo = [...item.hourNo].join(",");
+    })
+    currentDate=mass
             
     return (
         <GetBooking  data={currentDate} user="admin" action="Get All Current Booking"/>

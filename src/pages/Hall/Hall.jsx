@@ -84,7 +84,7 @@ const Hall = () => {
                         <input type="date" 
                             className='date' 
                             style={{textTransform:"uppercase"}}
-                            // min={disablePastDate()}
+                            min={disablePastDate()}
                             onChange={(e)=>setDate(e.target.value)}
                             placeholder="MM/DD/YYYY"
                         />

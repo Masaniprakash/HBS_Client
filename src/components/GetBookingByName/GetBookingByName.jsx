@@ -7,6 +7,7 @@ import GetBooking from "../GetBooking/GetBooking";
 
 const GetBookingByName = () => {
     const [user,setUser]=useState()
+    const [dataType,setDataType]=useState("current")
 
     const {data}=useFetch(`https://hbsserver.cyclic.app/api/hours/`)
 
@@ -50,24 +51,33 @@ const GetBookingByName = () => {
         })
     })
 
-    let currentDate=[]
-    let today = new Date();
-    let dd = today.getDate();
-    let mm = today.getMonth()+1; 
-    let yyyy = today.getFullYear();
-    if(dd<10) dd='0'+dd; //because less 10 value add 0 in front
-    if(mm<10) mm='0'+mm;
-    today = yyyy+'-'+mm+'-'+dd;
-    find.map((hour)=>{
-        if (hour.date?.split("T")[0]>=today){
-            currentDate.push(hour)
-        }
+    let mass=[]
+    find.map((item)=>{
+        let f=false
+        mass.map((item2,index)=>{
+            if(item.date?.split("T")[0] ===item2.date?.split("T")[0] && item.hallName === item2.hallName && item.name === item2.name){
+                f=true
+                // if(item2.hourNo?.toString()?.includes(",")){
+                //     if(item2.hourNo?.toString()?.split(",").includes(item2.hourNo)){
+                        item2.hourNo = item2.hourNo +","+ item.hourNo
+                //     } 
+                // }
+            }
+        })
+        if(!f) mass.push(item)
     })
+    mass.map((item)=>{
+        item.hourNo = item.hourNo?.toString()?.split(",")
+        if (item.hourNo?.length > 1) item.hourNo = item.hourNo?.sort((a,b)=>a-b)
+        item.hourNo = new Set(item.hourNo);
+        item.hourNo = [...item.hourNo].join(",");
+    })
+    find=mass
 
     return (
         <div>
             <Navbar />
-            <GetBooking data={currentDate} user="normal" action="get booking"/>
+            <GetBooking data={find} user="normal" action="get booking" setDataType={setDataType} dataType={dataType} />
             <Footer />
         </div>
     )

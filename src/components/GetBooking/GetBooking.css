@@ -8,6 +8,16 @@
     min-height: calc(100vh - 250px);
 }
 
+.ExportExcelAndRowsPerPage{
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    /* align-items: center; */
+    /* margin-bottom: 10px; */
+    /* margin-right: 29px;
+    margin-left: 15px; */
+}
+
 th,td,tr{
     min-width: fit-content;
     padding: 8px 5px;
@@ -41,7 +51,7 @@ th,td,tr{
 
 .cancelBtn{
     margin: 13px  50px;
-    margin-left: 0;
+    margin-left: 5px;
     padding: 10px;
     color: white;
     font-size: 14px;
@@ -80,10 +90,25 @@ th,td,tr{
     align-items: center;
 }
 
+#filter{
+    display: flex;
+    /* flex-direction: column; */
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 10px;
+}
+
 .filHallDate,.fltFromTo{
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+#filHallDate{
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    flex-wrap: wrap;
 }
 
 .filBox,.fltDep{
@@ -111,7 +136,16 @@ th,td,tr{
     .hallName,.dates{
         width: 90%;
     }
-    
+    .ExportExcelAndRowsPerPage{
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+}
+
+.paginationContainer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .pagination{
@@ -120,6 +154,8 @@ th,td,tr{
 }
 
 .pagination li{
+    width: 20px;
+    height: 20px;
     padding: 8px;
     margin: 5px 10px;
     border: 1px solid gray;
@@ -132,10 +168,31 @@ th,td,tr{
     color: white;
 }
 
-.paginationPrevNext{
+.paginationPrev,.paginationNext{
+    width: 40px;
+    height: 40px;
     padding: 8px;
     margin: 5px 10px;
     border: 1px solid gray;
     border-radius: 50%;
     cursor: pointer;
+    font-weight: 600;
+}
+
+.paginationPrev:disabled{
+    cursor: not-allowed;
+}
+
+.paginationNext:disabled{
+    cursor: not-allowed;
+}
+
+.noDataFound{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    font-weight: 600;
+    color: #003580;
+    margin: 50px 0px;
 }

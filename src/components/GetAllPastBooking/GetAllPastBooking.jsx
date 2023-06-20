@@ -45,7 +45,7 @@ const GetAllPastBooking = () => {
         ))
     )})
     let mass=[]
-    pastDate.map((item,index)=>{
+    pastDate.map((item)=>{
         let f=false
         mass.map((item2,index)=>{
             if(item.date?.split("T")[0] ===item2.date?.split("T")[0] && item.hallName === item2.hallName && item.name === item2.name){
@@ -63,12 +63,13 @@ const GetAllPastBooking = () => {
         item.hourNo = item.hourNo?.toString()?.split(",")
         if (item.hourNo?.length > 1) item.hourNo = item.hourNo?.sort((a,b)=>a-b)
         item.hourNo = new Set(item.hourNo);
-        // item.hourNo = item.hourNo?.sort()
         item.hourNo = [...item.hourNo].join(",");
     })
     pastDate=mass
+
+    
     return (
-        <GetBooking data={pastDate} user="admin" action="Get All Past Booking"/>
+        <GetBooking data={pastDate} le={pastDate.length} user="admin" action="Get All Past Booking"/>
     )
 }
 

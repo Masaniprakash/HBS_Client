@@ -31,7 +31,6 @@ const Navbar = () => {
                             <span className="lo"> S</span>ystem
                         </Link>
                     </span>
-
                     <ul className={click ? "nav-menu active" : "nav-menu"} style={{paddingLeft:0}}>
                         {user && <><li className="nav-item"   >
                             <Link
