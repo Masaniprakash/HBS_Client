@@ -14,9 +14,9 @@ const Navbar = () => {
     let admin=getAdmin?.isAdmin;
 
     const logout=()=>{
-        // localStorage.setItem("user", JSON.stringify(null)); 
         dispatch({type:"LOGOUT"})
         setClick(!click);
+        window.location.reload();
         navigate("/")     
     }
 
